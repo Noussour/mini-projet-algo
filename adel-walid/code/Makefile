@@ -35,7 +35,7 @@ $(OUTPUT_DIR):
 
 # Build a specific test executable
 $(OUTPUT_DIR)/%: $(TEST_DIR)/%.c $(SRC) | $(OUTPUT_DIR)
-	$(CC) $(CFLAGS) -$(TESTFLAGS) -o $@  $< $(SRC)
+	$(CC) $(CFLAGS) $(TESTFLAGS) -o $@  $< $(SRC)
 
 # Run all tests
 test: $(TEST_TARGETS)
