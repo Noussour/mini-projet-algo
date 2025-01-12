@@ -30,7 +30,7 @@ all: $(TARGET)
 
 # Main project build
 $(TARGET): $(OBJS) | $(OUTPUT_DIR)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(CFLAGS)
 
 # Pattern rule for object files
 $(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJECT_DIR)
