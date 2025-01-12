@@ -30,7 +30,7 @@ all: $(TARGET)
 
 # Main project build
 $(TARGET): $(OBJS) | $(OUTPUT_DIR)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(CFLAGS)
 
 # Pattern rule for object files
 $(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJECT_DIR)
@@ -61,10 +61,15 @@ run_test: $(OUTPUT_DIR)/test_$(TEST_NAME)
 	@echo "Running test $(TEST_NAME)..."
 	./$(OUTPUT_DIR)/test_$(TEST_NAME)
 
-generate_data: $(TARGET)
+
+$(DATA_DIR)/% :
+	mkdir -p $(dir $@)
+	touch $@
+
+generate_data: $(DATA_DIR)/input_arrays.txt
 	python3 $(SCRIPT_DIR)/generate_arrays.py
 
-evaluate: generate_data
+evaluate: $(TARGET) generate_data
 	./$(TARGET) $(DATA_DIR)/input_arrays.txt $(DATA_DIR)/result.csv
 
 visualize: evaluate
