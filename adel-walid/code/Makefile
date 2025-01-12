@@ -61,6 +61,15 @@ run_test: $(OUTPUT_DIR)/test_$(TEST_NAME)
 	@echo "Running test $(TEST_NAME)..."
 	./$(OUTPUT_DIR)/test_$(TEST_NAME)
 
+generate_data: $(TARGET)
+	python3 $(SCRIPT_DIR)/generate_arrays.py
+
+evaluate: generate_data
+	./$(TARGET) $(DATA_DIR)/input_arrays.txt $(DATA_DIR)/result.csv
+
+visualize: evaluate
+	python3 $(SCRIPT_DIR)/visualize_result.py
+
 # Clean target
 clean:
 	rm -rf $(OUTPUT_DIR) $(OBJECT_DIR)
