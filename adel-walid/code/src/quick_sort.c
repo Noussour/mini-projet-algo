@@ -1,36 +1,36 @@
 #include "../include/sorting.h"
 #include "../include/utils.h"
 
-int partition(int tab[], int p, int r) {
-  int eltPivot = tab[p];
-  int i = p;
-  int j = r;
+int partition(int arr[], int low, int high) {
 
-  do {
-    // Find element from right that's smaller than pivot
-    while (j >= p && tab[j] > eltPivot) {
-      j--;
-    }
-    // Find element from left that's larger than pivot
-    while (i <= r && tab[i] <= eltPivot) {
+  int p = arr[low];
+  int i = low;
+  int j = high;
+
+  while (i < j) {
+
+    while (arr[i] <= p && i <= high - 1) {
       i++;
     }
-    // Swap elements if indexes haven't crossed
-    if (j > i) {
-      swap(&tab[i], &tab[j]);
-      j--;
-      i++;
-    }
-  } while (j > i);
 
+    while (arr[j] > p && j >= low + 1) {
+      j--;
+    }
+    if (i < j) {
+      swap(&arr[i], &arr[j]);
+    }
+  }
+  swap(&arr[low], &arr[j]);
   return j;
 }
 
-void quick_sort_helper(int tab[], int p, int r) {
-  if (p < r) {
-    int q = partition(tab, p, r);
-    quick_sort_helper(tab, p, q);
-    quick_sort_helper(tab, q + 1, r);
+void quick_sort_helper(int arr[], int low, int high) {
+  if (low < high) {
+
+    int pi = partition(arr, low, high);
+
+    quick_sort_helper(arr, low, pi - 1);
+    quick_sort_helper(arr, pi + 1, high);
   }
 }
 
