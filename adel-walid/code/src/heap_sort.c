@@ -2,24 +2,24 @@
 #include "../include/utils.h"
 
 void heapify(int arr[], int n, int i) {
-  int smallest = i;
+  int largest = i;
   int left = 2 * i + 1;  // Left child
   int right = 2 * i + 2; // Right child
 
-  if (left < n && arr[left] < arr[smallest])
-    smallest = left;
+  if (left < n && arr[left] > arr[largest]) // Changed < to >
+    largest = left;
 
-  if (right < n && arr[right] < arr[smallest])
-    smallest = right;
+  if (right < n && arr[right] > arr[largest]) // Changed < to >
+    largest = right;
 
-  if (smallest != i) {
-    swap(&arr[i], &arr[smallest]);
-    heapify(arr, n, smallest);
+  if (largest != i) {
+    swap(&arr[i], &arr[largest]);
+    heapify(arr, n, largest);
   }
 }
 
 void heap_sort(int arr[], int n) {
-  // Build min heap
+  // Build max heap
   for (int i = n / 2 - 1; i >= 0; i--)
     heapify(arr, n, i);
 
