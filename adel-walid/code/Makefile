@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Iinclude
+CFLAGS = -Wall -Iinclude -lm
 LDFLAGS = -ld
 TESTFLAGS = -lcunit
 
@@ -10,14 +10,17 @@ INCLUDE_DIR = include
 TEST_DIR = test
 DATA_DIR = data
 OUTPUT_DIR = bin
+OBJECT_DIR = obj
 SCRIPT_DIR = scripts
 
 # Source files
 SRC = $(wildcard $(SRC_DIR)/*.c)
 TESTS = $(wildcard $(TEST_DIR)/*.c)
 
-# Object files
-OBJS = $(patsubst %.c, %.o, $(SRC))
+# Object files with new directory
+OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJECT_DIR)/%.o, $(SRC))
+TEST_OBJS = $(patsubst $(TEST_DIR)/%.c, $(OBJECT_DIR)/test_%.o, $(TESTS))
+TEST_TARGETS = $(patsubst $(TEST_DIR)/%.c, $(OUTPUT_DIR)/test_%, $(TESTS))
 
 # Target executable
 TARGET = $(OUTPUT_DIR)/sorting_project
@@ -29,31 +32,38 @@ all: $(TARGET)
 $(TARGET): $(OBJS) | $(OUTPUT_DIR)
 	$(CC) $(CFLAGS) -o $@ $^
 
-# Create output directory if not exists
-$(OUTPUT_DIR):
-	mkdir -p $(OUTPUT_DIR)
+# Pattern rule for object files
+$(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJECT_DIR)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+# Pattern rule for test object files
+$(OBJECT_DIR)/test_%.o: $(TEST_DIR)/%.c | $(OBJECT_DIR)
+	$(CC) -c $< -o $@ $(CFLAGS) $(TESTFLAGS)
+
+# Create directories if not exists
+$(OUTPUT_DIR) $(OBJECT_DIR):
+	mkdir -p $@
 
 # Build a specific test executable
-$(OUTPUT_DIR)/%: $(TEST_DIR)/%.c $(SRC) | $(OUTPUT_DIR)
-	$(CC) -o $@ $< $(SRC) $(CFLAGS) $(TESTFLAGS)
+$(OUTPUT_DIR)/test_%: $(OBJECT_DIR)/test_%.o $(OBJS) | $(OUTPUT_DIR)
+	$(CC) -o $@ $^ $(CFLAGS) $(TESTFLAGS)
 
 # Run all tests
 test: $(TEST_TARGETS)
 	@echo "Running all tests..."
 	@for test in $(TEST_TARGETS); do \
 		echo "Running $$test..."; \
-		$$test; \
+		./$$test; \
 	done
 
 # Run a specific test
-run_test: $(OUTPUT_DIR)/$(TEST_NAME)
+run_test: $(OUTPUT_DIR)/test_$(TEST_NAME)
 	@echo "Running test $(TEST_NAME)..."
-	@$(OUTPUT_DIR)/$(TEST_NAME)
+	./$(OUTPUT_DIR)/test_$(TEST_NAME)
 
 # Clean target
 clean:
-	rm -rf $(OUTPUT_DIR)
+	rm -rf $(OUTPUT_DIR) $(OBJECT_DIR)
 
-# Parameterized test target
+# Phony targets
 .PHONY: all clean test run_test
-
