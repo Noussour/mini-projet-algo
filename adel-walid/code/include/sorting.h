@@ -8,6 +8,7 @@
 void bubble_sort(int arr[], int n);
 void gnome_sort(int arr[], int n);
 void quick_sort(int arr[], int n);
+void heapify(int arr[], int n, int i);
 void heap_sort(int arr[], int n);
 void radix_sort(int arr[], int n);
 
