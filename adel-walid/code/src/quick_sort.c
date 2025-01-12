@@ -26,10 +26,12 @@ int partition(int tab[], int p, int r) {
   return j;
 }
 
-void quick_sort(int tab[], int p, int r) {
+void quick_sort_helper(int tab[], int p, int r) {
   if (p < r) {
     int q = partition(tab, p, r);
-    quick_sort(tab, p, q);
-    quick_sort(tab, q + 1, r);
+    quick_sort_helper(tab, p, q);
+    quick_sort_helper(tab, q + 1, r);
   }
 }
+
+void quick_sort(int arr[], int n) { quick_sort_helper(arr, 0, n - 1); }
