@@ -3,8 +3,10 @@
 #include <CUnit/CUnit.h>
 
 void test_heap_sort() {
-  int arr[] = {5, 2, 9, 1, 6};
-  int expected[] = {1, 2, 5, 6, 9};
+  int arr[] = {15, 22, 9, 1,  6, 18, 3,  27, 14, 0,
+               25, 19, 8, 12, 5, 21, 30, 17, 4,  10};
+  int expected[] = {30, 27, 25, 22, 21, 19, 18, 17, 15, 14,
+                    12, 10, 9,  8,  6,  5,  4,  3,  1,  0};
   int n = sizeof(arr) / sizeof(arr[0]);
 
   heap_sort(arr, n);
@@ -16,7 +18,7 @@ void test_heap_sort() {
 
 void test_heap_sort_sorted_array() {
   int arr[] = {1, 2, 3, 4, 5};
-  int expected[] = {1, 2, 3, 4, 5};
+  int expected[] = {5, 4, 3, 2, 1};
   int n = sizeof(arr) / sizeof(arr[0]);
 
   heap_sort(arr, n);
