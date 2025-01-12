@@ -1,6 +1,7 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Iinclude -lm
+CFLAGS = -Wall -Iinclude
+LIBS = -lm
 LDFLAGS = -ld
 TESTFLAGS = -lcunit
 
@@ -10,17 +11,18 @@ INCLUDE_DIR = include
 TEST_DIR = test
 DATA_DIR = data
 OUTPUT_DIR = bin
-OBJECT_DIR = obj
-SCRIPT_DIR = scripts
+OBJ_DIR = obj
+SCRIPT_DIR=scripts
 
-# Source files
-SRC = $(wildcard $(SRC_DIR)/*.c)
+# Source files (excluding main.c)
+SRC = $(filter-out $(SRC_DIR)/main.c, $(wildcard $(SRC_DIR)/*.c))
+MAIN = $(SRC_DIR)/main.c
 TESTS = $(wildcard $(TEST_DIR)/*.c)
 
-# Object files with new directory
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJECT_DIR)/%.o, $(SRC))
-TEST_OBJS = $(patsubst $(TEST_DIR)/%.c, $(OBJECT_DIR)/test_%.o, $(TESTS))
-TEST_TARGETS = $(patsubst $(TEST_DIR)/%.c, $(OUTPUT_DIR)/test_%, $(TESTS))
+# Object files
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
+MAIN_OBJ = $(OBJ_DIR)/main.o
+TEST_OBJS = $(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR)/test_%.o,$(TESTS))
 
 # Target executable
 TARGET = $(OUTPUT_DIR)/sorting_project
@@ -28,33 +30,35 @@ TARGET = $(OUTPUT_DIR)/sorting_project
 # Default target
 all: $(TARGET)
 
-# Main project build
-$(TARGET): $(OBJS) | $(OUTPUT_DIR)
-	$(CC) -o $@ $^ $(CFLAGS)
-
-# Pattern rule for object files
-$(OBJECT_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJECT_DIR)
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-# Pattern rule for test object files
-$(OBJECT_DIR)/test_%.o: $(TEST_DIR)/%.c | $(OBJECT_DIR)
-	$(CC) -c $< -o $@ $(CFLAGS) $(TESTFLAGS)
-
-# Create directories if not exists
-$(OUTPUT_DIR) $(OBJECT_DIR):
+# Create directories if they don't exist
+$(OBJ_DIR) $(OUTPUT_DIR):
 	mkdir -p $@
 
+# Main project build
+$(TARGET): $(OBJS) $(MAIN_OBJ) | $(OUTPUT_DIR)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+# Compile source files
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+# Compile test files
+$(OBJ_DIR)/test_%.o: $(TEST_DIR)/%.c | $(OBJ_DIR)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
 # Build a specific test executable
-$(OUTPUT_DIR)/test_%: $(OBJECT_DIR)/test_%.o $(OBJS) | $(OUTPUT_DIR)
-	$(CC) -o $@ $^ $(CFLAGS) $(TESTFLAGS)
+$(OUTPUT_DIR)/test_%: $(OBJ_DIR)/test_%.o $(OBJS) | $(OUTPUT_DIR)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS) $(TESTFLAGS)
+
+# Pattern rule for test targets
+test_%: $(OUTPUT_DIR)/test_%
+	@echo "Running $@..."
+	@./$<
 
 # Run all tests
+TEST_TARGETS = $(patsubst $(TEST_DIR)/%.c,test_%,$(TESTS))
 test: $(TEST_TARGETS)
-	@echo "Running all tests..."
-	@for test in $(TEST_TARGETS); do \
-		echo "Running $$test..."; \
-		./$$test; \
-	done
+	@echo "All tests completed." 
 
 # Run a specific test
 run_test: $(OUTPUT_DIR)/test_$(TEST_NAME)
