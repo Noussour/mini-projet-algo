@@ -16,4 +16,13 @@ static inline void swap(int *x, int *y) {
   *y = tmp;
 }
 
+// Function to get digit at position i from right to left
+static inline int key(int x, int i) {
+  while (i > 0) {
+    x = x / 10;
+    i--;
+  }
+  return x % 10;
+}
+
 #endif

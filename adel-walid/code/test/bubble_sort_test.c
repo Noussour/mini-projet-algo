@@ -3,8 +3,10 @@
 #include <CUnit/CUnit.h>
 
 void test_bubble_sort() {
-  int arr[] = {5, 2, 9, 1, 6};
-  int expected[] = {1, 2, 5, 6, 9};
+  int arr[] = {15, 22, 9, 1,  6, 18, 3,  27, 14, 0,
+               25, 19, 8, 12, 5, 21, 30, 17, 4,  10};
+  int expected[] = {0,  1,  3,  4,  5,  6,  8,  9,  10, 12,
+                    14, 15, 17, 18, 19, 21, 22, 25, 27, 30};
   int n = sizeof(arr) / sizeof(arr[0]);
 
   bubble_sort(arr, n);
