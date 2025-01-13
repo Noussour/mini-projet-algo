@@ -74,9 +74,10 @@ To study the real cost of the algorithms, we tested them on arrays of integers o
 \subsection{Gnome Sort}
 
 \subsubsection{Algorithm}
-The following C code
+The \textbf{Gnome Sort} function in C sorts an array of integers in ascending order by iteratively comparing each element with the next one and swapping them if they are out of order, moving the index backward after a swap to recheck previous elements, and moving it forward otherwise, continuing this process until the entire array is sorted, ensuring that each element is in its correct position by the end of the algorithm.
 
-\begin{lstlisting}[language=C, caption=Matrix Multiplication]
+\newpage
+\begin{lstlisting}[language=C, caption=Gnome Sort implementation]
 void gnome_sort(int arr[], int n) {
   int i = 0;
 
@@ -113,9 +114,9 @@ To study the real cost of the algorithms, we tested them on arrays of integers o
 \subsection{Radix Sort}
 
 \subsubsection{Algorithm}
-The following C code
+The \textbf{Sort Aux} function in C sorts an array of integers based on a specific digit (determined by the parameter `i`) using a counting sort approach, where it first counts the occurrences of each digit, then calculates the cumulative count, places the elements into an output array in sorted order according to the current digit, and finally copies the sorted elements back into the original array, ensuring that the array is partially sorted by the specified digit.
 
-\begin{lstlisting}[language=C, caption=Matrix Multiplication]
+\begin{lstlisting}[language=C, caption=Sort Aux implementation]
 void sort_aux(int arr[], int n, int i) {
   int *output = (int *)malloc(n * sizeof(int));
   int count[10] = {0};
@@ -138,17 +139,16 @@ void sort_aux(int arr[], int n, int i) {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[language=C, caption=Matrix Multiplication]
+The \textbf{Radix Sort Helper} function in C sorts an array of integers by iterating through each digit from the least significant to the most significant, calling the \textbf{Sort Aux} function to sort the array based on the current digit, while the \textbf{Radix Sort} function determines the maximum number of digits in the largest number of the array and then calls \textbf{Radix Sort Helper} to perform the sorting process, ensuring the entire array is sorted by all digits.
+
+\begin{lstlisting}[language=C, caption=Radix Sort implementation]
 void radix_sort_helper(int arr[], int n, int k) {
   // k represents the maximum number of digits
   for (int i = 0; i < k; i++) {
     sort_aux(arr, n, i);
   }
 }
-\end{lstlisting}
 
-\newpage
-\begin{lstlisting}[language=C, caption=Matrix Multiplication]
 void radix_sort(int arr[], int n) {
   // maximum number of digits is the number of digits of the largest number
   int imax = 0;
@@ -181,10 +181,9 @@ To study the real cost of the algorithms, we tested them on arrays of integers o
 \subsection{Quick Sort}
 
 \subsubsection{Algorithm}
-The following C code
+The \textbf{Partition} function in C rearranges the elements of an array around a pivot element (chosen as the first element of the array segment) such that all elements less than or equal to the pivot are on its left and all elements greater than the pivot are on its right, by iteratively moving indices from both ends towards the center, swapping elements as needed, and finally placing the pivot in its correct position, returning the index of the pivot.
 
-\newpage
-\begin{lstlisting}[language=C, caption=Matrix Multiplication]
+\begin{lstlisting}[language=C, caption=Partition implementation]
 int partition(int arr[], int low, int high) {
   int p = arr[low];
   int i = low;
@@ -206,7 +205,9 @@ int partition(int arr[], int low, int high) {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[language=C, caption=Matrix Multiplication]
+The \textbf{Quick Sort Helper} function in C recursively sorts an array of integers by partitioning the array around a pivot element and then sorting the subarrays on either side of the pivot, while the \textbf{Quick Sort} function serves as a wrapper that initializes the recursive process by calling \textbf{Quick Sort Helper} with the full range of the array.
+
+\begin{lstlisting}[language=C, caption=Quick Sort implementation]
 void quick_sort_helper(int arr[], int low, int high) {
   if (low < high) {
     int pi = partition(arr, low, high);
@@ -237,18 +238,19 @@ To study the real cost of the algorithms, we tested them on arrays of integers o
 \subsection{Heap Sort}
 
 \subsubsection{Algorithm}
-The following C code
+The \textbf{Heapify} function in C maintains the heap property of a binary heap by comparing a node with its children and swapping it with the largest child if necessary, then recursively applying the same process to the affected subtree, ensuring that the subtree rooted at the given node becomes a valid max-heap.
 
-\begin{lstlisting}[language=C, caption=Matrix Multiplication]
+\newpage
+\begin{lstlisting}[language=C, caption=Heapify implementation]
 void heapify(int arr[], int n, int i) {
   int largest = i;
   int left = 2 * i + 1;  // Left child
   int right = 2 * i + 2; // Right child
 
-  if (left < n && arr[left] > arr[largest]) // Changed < to >
+  if (left < n && arr[left] > arr[largest])
     largest = left;
 
-  if (right < n && arr[right] > arr[largest]) // Changed < to >
+  if (right < n && arr[right] > arr[largest])
     largest = right;
 
   if (largest != i) {
@@ -258,7 +260,9 @@ void heapify(int arr[], int n, int i) {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[language=C, caption=Matrix Multiplication]
+The \textbf{Heap Sort} function in C sorts an array of integers in ascending order by first building a max heap from the array, then repeatedly extracting the maximum element from the heap and placing it at the end of the array, and finally re-heapifying the remaining elements until the entire array is sorted.
+
+\begin{lstlisting}[language=C, caption=Heap Sort implementation]
 void heap_sort(int arr[], int n) {
   // Build max heap
   for (int i = n / 2 - 1; i >= 0; i--)
