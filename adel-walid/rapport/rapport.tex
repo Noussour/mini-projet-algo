@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{listings}
 \usepackage{hyperref}
+\usepackage{float}
 \usepackage{xcolor}    % For syntax highlighting
 \usepackage{listings}
 %
@@ -63,11 +64,10 @@ Bubble Sort has a worst-case and average-case time complexity of $O(n^2)$, where
 To study the real cost of the algorithms, we tested them on arrays of integers of increasing size $n$ filled randomly. Time measurement was done several times (5 times) for a given array size. The values of $n$ chosen were 100, 1000, 10000, and 100000.
 
 \subsubsection{Results}
-\begin{figure}[ht]
+\begin{figure}[H]
 	% \centering
-	% \includegraphics[width=0.8\textwidth]{sorting_times.png}
-	% \caption{Running time as a function of $n$}
-	% \label{fig:sorting_times}
+	\includegraphics[width=0.8\textwidth]{images/complexity-vizualisation.png}
+	\caption{Running time as a function of $n$}
 \end{figure}
 
 
@@ -103,11 +103,10 @@ Gnome Sort has a worst-case and average-case time complexity of $O(n^2)$, where 
 To study the real cost of the algorithms, we tested them on arrays of integers of increasing size $n$ filled randomly. Time measurement was done several times (5 times) for a given array size. The values of $n$ chosen were 100, 1000, 10000, and 100000.
 
 \subsubsection{Results}
-\begin{figure}[ht]
+\begin{figure}[H]
 	% \centering
-	% \includegraphics[width=0.8\textwidth]{sorting_times.png}
-	% \caption{Running time as a function of $n$}
-	% \label{fig:sorting_times}
+	\includegraphics[width=0.8\textwidth]{images/complexity-vizualisation.png}
+	\caption{Running time as a function of $n$}
 \end{figure}
 
 
@@ -116,6 +115,7 @@ To study the real cost of the algorithms, we tested them on arrays of integers o
 \subsubsection{Algorithm}
 The \textbf{Sort Aux} function in C sorts an array of integers based on a specific digit (determined by the parameter `i`) using a counting sort approach, where it first counts the occurrences of each digit, then calculates the cumulative count, places the elements into an output array in sorted order according to the current digit, and finally copies the sorted elements back into the original array, ensuring that the array is partially sorted by the specified digit.
 
+\newpage
 \begin{lstlisting}[language=C, caption=Sort Aux implementation]
 void sort_aux(int arr[], int n, int i) {
   int *output = (int *)malloc(n * sizeof(int));
@@ -170,11 +170,10 @@ Radix Sort has a time complexity of $O(d \cdot (n + k))$, where $d$ is the numbe
 To study the real cost of the algorithms, we tested them on arrays of integers of increasing size $n$ filled randomly. Time measurement was done several times (5 times) for a given array size. The values of $n$ chosen were 100, 1000, 10000, and 100000.
 
 \subsubsection{Results}
-\begin{figure}[ht]
+\begin{figure}[H]
 	% \centering
-	% \includegraphics[width=0.8\textwidth]{sorting_times.png}
-	% \caption{Running time as a function of $n$}
-	% \label{fig:sorting_times}
+	\includegraphics[width=0.8\textwidth]{images/complexity-vizualisation.png}
+	\caption{Running time as a function of $n$}
 \end{figure}
 
 
@@ -227,11 +226,10 @@ Quick Sort has a worst-case time complexity of $O(n^2)$, which occurs when the p
 To study the real cost of the algorithms, we tested them on arrays of integers of increasing size $n$ filled randomly. Time measurement was done several times (5 times) for a given array size. The values of $n$ chosen were 100, 1000, 10000, and 100000.
 
 \subsubsection{Results}
-\begin{figure}[ht]
+\begin{figure}[H]
 	% \centering
-	% \includegraphics[width=0.8\textwidth]{sorting_times.png}
-	% \caption{Running time as a function of $n$}
-	% \label{fig:sorting_times}
+	\includegraphics[width=0.8\textwidth]{images/complexity-vizualisation.png}
+	\caption{Running time as a function of $n$}
 \end{figure}
 
 
@@ -240,7 +238,6 @@ To study the real cost of the algorithms, we tested them on arrays of integers o
 \subsubsection{Algorithm}
 The \textbf{Heapify} function in C maintains the heap property of a binary heap by comparing a node with its children and swapping it with the largest child if necessary, then recursively applying the same process to the affected subtree, ensuring that the subtree rooted at the given node becomes a valid max-heap.
 
-\newpage
 \begin{lstlisting}[language=C, caption=Heapify implementation]
 void heapify(int arr[], int n, int i) {
   int largest = i;
@@ -283,11 +280,10 @@ Heap Sort has a time complexity of $O(n \log n)$ for all cases (worst, average, 
 To study the real cost of the algorithms, we tested them on arrays of integers of increasing size $n$ filled randomly. Time measurement was done several times (5 times) for a given array size. The values of $n$ chosen were 100, 1000, 10000, and 100000.
 
 \subsubsection{Results}
-\begin{figure}[ht]
+\begin{figure}[H]
 	% \centering
-	% \includegraphics[width=0.8\textwidth]{sorting_times.png}
-	% \caption{Running time as a function of $n$}
-	% \label{fig:sorting_times}
+	\includegraphics[width=0.8\textwidth]{images/complexity-vizualisation.png}
+	\caption{Running time as a function of $n$}
 \end{figure}
 
 \section{Conclusion}
