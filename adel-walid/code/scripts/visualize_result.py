@@ -6,9 +6,6 @@ import seaborn as sns
 # Load the data
 df = pd.read_csv("data/result.csv")
 
-# Set the seaborn style
-sns.set(style="whitegrid")
-
 # Create a color palette
 palette = sns.color_palette("husl", len(df["Algorithm"].unique()))
 
