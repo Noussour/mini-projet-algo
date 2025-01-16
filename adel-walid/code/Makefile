@@ -86,8 +86,11 @@ $(DATA_DIR)/%: | $(DATA_DIR)
 	$(MKDIR) "$(dir $@)"
 	type nul > "$@"
 
-generate_data: $(DATA_DIR)/input_arrays.txt
+# Data generation and visualization
+$(DATA_DIR)/input_arrays.txt: | $(DATA_DIR)
 	$(PYTHON) $(SCRIPT_DIR)$(SEP)generate_arrays.py
+
+generate_data: $(DATA_DIR)/input_arrays.txt
 
 evaluate: $(TARGET) generate_data
 	.$(SEP)$(TARGET) $(DATA_DIR)$(SEP)input_arrays.txt $(DATA_DIR)$(SEP)result.csv
