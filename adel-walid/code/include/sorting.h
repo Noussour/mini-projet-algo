@@ -6,6 +6,7 @@
 #include <time.h>
 
 void bubble_sort(int arr[], int n);
+void optimized_bubble_sort(int arr[], int n);
 
 void gnome_sort(int arr[], int n);
 

@@ -14,7 +14,8 @@ typedef enum {
   HEAP_SORT = 1 << 2,
   QUICK_SORT = 1 << 3,
   RADIX_SORT = 1 << 4,
-  ALL_SORTS = (1 << 5) - 1
+  OPT_BUBBLE_SORT = 1 << 5,
+  ALL_SORTS = (1 << 6) - 1
 } SortingAlgorithm;
 
 #define SELECTED_ALGORITHMS (QUICK_SORT | HEAP_SORT)
