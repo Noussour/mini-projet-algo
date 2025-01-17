@@ -18,7 +18,7 @@ typedef enum {
   ALL_SORTS = (1 << 6) - 1
 } SortingAlgorithm;
 
-#define SELECTED_ALGORITHMS (QUICK_SORT | HEAP_SORT)
+#define SELECTED_ALGORITHMS ALL_SORTS
 
 typedef struct {
   const char *name;
@@ -125,11 +125,17 @@ int main(int argc, char *argv[]) {
 
   // Initialize CSV file
   FILE *csv_file = open_csv(output_csv, "w");
+  if (!csv_file) {
+    return 1;
+  }
   set_csv_file(csv_file);
   fclose(csv_file);
 
   // Append results
   csv_file = open_csv(output_csv, "a");
+  if (!csv_file) {
+    return 1;
+  }
 
   // Run enabled sorting algorithms
   for (int i = 0; i < count; i++) {
