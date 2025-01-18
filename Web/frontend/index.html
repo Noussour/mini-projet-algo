@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to Plot</title>
+</head>
+<body>
+    <h1>Upload CSV to Generate Plot</h1>
+    <form id="upload-form">
+        <input type="file" id="csv-file" name="file" accept=".csv" required />
+        <button type="submit">Upload and Generate Plot</button>
+    </form>
+    <br />
+    <h2>Generated Plot:</h2>
+    <img id="plot-image" alt="Generated Plot" style="max-width: 100%; display: none;" />
+    <br />
+    <a id="download-link" style="display: none;">Download Plot</a>
+
+    <script>
+        const form = document.getElementById("upload-form");
+        const plotImage = document.getElementById("plot-image");
+        const downloadLink = document.getElementById("download-link");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const fileInput = document.getElementById("csv-file");
+            if (!fileInput.files.length) return alert("Please select a CSV file.");
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            try {
+                const response = await fetch("http://127.0.0.1:5000/upload-csv", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    return alert(`Error: ${error.error}`);
+                }
+
+                // Convert response to blob
+                const blob = await response.blob();
+
+                // Display the plot image
+                const url = URL.createObjectURL(blob);
+                plotImage.src = url;
+                plotImage.style.display = "block";
+
+                // Create a download link
+                downloadLink.href = url;
+                downloadLink.download = "plot.png";
+                downloadLink.textContent = "Download Plot";
+                downloadLink.style.display = "block";
+            } catch (err) {
+                alert(`Error: ${err.message}`);
+            }
+        });
+    </script>
+</body>
+</html>
+
