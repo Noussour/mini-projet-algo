@@ -245,6 +245,31 @@ void quick_sort_helper(int arr[], int low, int high) {
 void quick_sort(int arr[], int n) { quick_sort_helper(arr, 0, n - 1); }
 \end{lstlisting}
 
+\newpage
+\subsubsection{Recurrence Equation}
+The recurrence equation for the Quick Sort algorithm can be derived based on the partitioning process. Let $T(n)$ be the time complexity of Quick Sort for an array of size $n$.
+
+In the worst case, the pivot element divides the array into two subarrays of sizes $0$ and $n-1$. Therefore, the recurrence relation for the worst case is:
+\[
+	T(n) = T(n-1) + T(0) + O(n) = T(n-1) + O(n)
+\]
+
+In the best case, the pivot element divides the array into two equal subarrays of size $n/2$. Therefore, the recurrence relation for the best case is:
+\[
+	T(n) = 2T\left(\frac{n}{2}\right) + O(n)
+\]
+
+To solve the best-case recurrence relation, we use the Master Theorem for divide-and-conquer recurrences of the form:
+\[
+	T(n) = aT\left(\frac{n}{b}\right) + f(n)
+\]
+where $a = 2$, $b = 2$, and $f(n) = O(n)$. According to the Master Theorem, since $a = b^c$ where $c = 1$, we have:
+\[
+	T(n) = O(n \log n)
+\]
+
+Thus, the best-case and average-case time complexity of Quick Sort is $O(n \log n)$, while the worst-case time complexity is $O(n^2)$.
+
 \subsubsection{Complexity}
 Quick Sort has a worst-case time complexity of $O(n^2)$, which occurs when the pivot selection is poor. However, the average-case and best-case time complexity is $O(n \log n)$. The space complexity is $O(\log n)$ due to the recursive stack space.
 
