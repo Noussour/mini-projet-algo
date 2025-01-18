@@ -129,9 +129,20 @@ Gnome Sort has a worst-case and average-case time complexity of $O(n^2)$, where 
 \subsection{Radix Sort}
 
 \subsubsection{Algorithm}
+The \textbf{key} function in C extracts the digit at a specific position (determined by the parameter \textbf{i}) from an integer \textbf{x}. It repeatedly divides \textbf{x} by 10 until the desired position is reached and then returns the digit at that position using the modulus operator.
+
+\begin{lstlisting}[language=C, caption=Key implementation]
+int key(int x, int i) {
+  while (i > 0) {
+    x = x / 10;
+    i--;
+  }
+  return x % 10;
+}
+\end{lstlisting}
+
 The \textbf{Sort Aux} function in C sorts an array of integers based on a specific digit (determined by the parameter `i`) using a counting sort approach, where it first counts the occurrences of each digit, then calculates the cumulative count, places the elements into an output array in sorted order according to the current digit, and finally copies the sorted elements back into the original array, ensuring that the array is partially sorted by the specified digit.
 
-\newpage
 \begin{lstlisting}[language=C, caption=Sort Aux implementation]
 void sort_aux(int arr[], int n, int i) {
   int *output = (int *)malloc(n * sizeof(int));
@@ -155,6 +166,7 @@ void sort_aux(int arr[], int n, int i) {
 }
 \end{lstlisting}
 
+\newpage
 The \textbf{Radix Sort Helper} function in C sorts an array of integers by iterating through each digit from the least significant to the most significant, calling the \textbf{Sort Aux} function to sort the array based on the current digit, while the \textbf{Radix Sort} function determines the maximum number of digits in the largest number of the array and then calls \textbf{Radix Sort Helper} to perform the sorting process, ensuring the entire array is sorted by all digits.
 
 \begin{lstlisting}[language=C, caption=Radix Sort implementation]
@@ -195,6 +207,7 @@ Radix Sort has a time complexity of $O(d \cdot (n + k))$, where $d$ is the numbe
 \subsubsection{Algorithm}
 The \textbf{Partition} function in C rearranges the elements of an array around a pivot element (chosen as the first element of the array segment) such that all elements less than or equal to the pivot are on its left and all elements greater than the pivot are on its right, by iteratively moving indices from both ends towards the center, swapping elements as needed, and finally placing the pivot in its correct position, returning the index of the pivot.
 
+\newpage
 \begin{lstlisting}[language=C, caption=Partition implementation]
 int partition(int arr[], int low, int high) {
   int p = arr[low];
