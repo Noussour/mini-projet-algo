@@ -28,6 +28,7 @@ typedef struct {
 
 static const SortingAlgorithmInfo algorithms[] = {
     {"Bubble Sort", bubble_sort, BUBBLE_SORT},
+    {"Optimized Bubble Sort", optimized_bubble_sort, OPT_BUBBLE_SORT},
     {"Gnome Sort", gnome_sort, GNOME_SORT},
     {"Heap Sort", heap_sort, HEAP_SORT},
     {"Quick Sort", quick_sort, QUICK_SORT},
