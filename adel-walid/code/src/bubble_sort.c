@@ -2,16 +2,14 @@
 #include "../include/utils.h"
 
 void bubble_sort(int arr[], int n) {
-  for (int i = 0; i < n; i++) {
-    int sorted = 1;
-    for (int j = 0; j < n - i - 1; j++) {
-      if (arr[j] > arr[j + 1]) {
-        swap(&arr[j], &arr[j + 1]);
-        sorted = 0;
+  int change = 1; // boolean variable
+  while (change) {
+    change = 0;
+    for (int i = 0; i < n - 1; i++) {
+      if (arr[i] > arr[i + 1]) {
+        swap(&arr[i], &arr[i + 1]);
+        change = 1;
       }
-    }
-    if (sorted) {
-      return;
     }
   }
 }

@@ -37,34 +37,57 @@ Sorting is one of the most classically studied families of algorithms, because t
 \subsection{Bubble Sort}
 
 \subsubsection{Algorithm}
-The \textbf{Bubble Sort} function in C sorts an array of integers in ascending order using the bubble sort algorithm. It iterates through the array multiple times, comparing and swapping adjacent elements if they are in the wrong order. The process is repeated until the array is sorted. An optimization is included with a \textbf{sorted flag} that allows the function to exit early if no swaps are made during a pass, indicating that the array is already sorted. This reduces unnecessary iterations and improves efficiency.
+The \textbf{Bubble Sort} function in C sorts an array of integers in ascending order using the bubble sort algorithm. It iterates through the array multiple times, comparing and swapping adjacent elements if they are in the wrong order. The process is repeated until the array is sorted. An optimization is included with a \textbf{change flag} that allows the function to exit early if no swaps are made during a pass, indicating that the array is already sorted. This reduces unnecessary iterations and improves efficiency.
 
 \newpage
 \begin{lstlisting}[language=C, caption=Bubble Sort implementation]
 void bubble_sort(int arr[], int n) {
-  for (int i = 0; i < n; i++) {
-    int sorted = 1;
-    for (int j = 0; j < n - i - 1; j++) {
-      if (arr[j] > arr[j + 1]) {
-        swap(&arr[j], &arr[j + 1]);
-        sorted = 0;
+  int change = 1; // boolean variable
+  while (change) {
+    change = 0;
+    for (int i = 0; i < n - 1; i++) {
+      if (arr[i] > arr[i + 1]) {
+        swap(&arr[i], &arr[i + 1]);
+        change = 1;
       }
-    }
-    if (sorted) {
-      return;
     }
   }
 }
 \end{lstlisting}
 
+The \textbf{Optimized Bubble Sort} function in C sorts an array of integers in ascending order using an optimized version of the bubble sort algorithm. It iterates through the array multiple times, comparing and swapping adjacent elements if they are in the wrong order. The process is repeated until the array is sorted. An optimization is included with a \textbf{change flag} that allows the function to exit early if no swaps are made during a pass, indicating that the array is already sorted. Additionally, the range of the inner loop is reduced by one after each pass, as the largest elements are moved to their correct positions at the end of the array. This reduces unnecessary comparisons and improves efficiency.
+
+\begin{lstlisting}[language=C, caption=Optimized Bubble Sort implementation]
+void optimized_bubble_sort(int arr[], int n) {
+  int m = n - 1;
+  int change = 1;
+
+  while (change) {
+    change = 0;
+    for (int i = 0; i < m; i++) {
+      if (arr[i] > arr[i + 1]) {
+        swap(&arr[i], &arr[i + 1]);
+        change = 1;
+      }
+    }
+    m--;
+  }
+}
+\end{lstlisting}
+
+\newpage
 \subsubsection{Complexity}
-Bubble Sort has a worst-case and average-case time complexity of $O(n^2)$, where $n$ is the number of elements to be sorted. The best-case time complexity is $O(n)$ when the array is already sorted. The space complexity is $O(1)$ as it is an in-place sorting algorithm.
+Both Bubble Sort and Optimized Bubble Sort have a worst-case and average-case time complexity of $O(n^2)$, where $n$ is the number of elements to be sorted. This is because, in the worst case, each element needs to be compared with every other element, resulting in $n(n-1)/2$ comparisons.
+
+However, the best-case time complexity differs between the two algorithms. For Bubble Sort, the best-case time complexity is $O(n)$ when the array is already sorted, as the algorithm will still iterate through the entire array once to confirm that no swaps are needed. For Optimized Bubble Sort, the best-case time complexity is also $O(n)$, but it can potentially reduce the number of comparisons further due to the decreasing range of the inner loop after each pass.
+
+The space complexity for both algorithms is $O(1)$ as they are in-place sorting algorithms, meaning they do not require additional memory proportional to the input size.
 
 \subsubsection{Results}
 \begin{figure}[H]
 	% \centering
-	\includegraphics[width=0.8\textwidth]{images/bubble_sort.png}
-	\caption{Bubble Sort running time as a function of $n$}
+	\includegraphics[width=0.8\textwidth]{images/bubble_sort_comparaison.png}
+	\caption{Bubble Sort and Optimized Bubble Sort running time as a function of $n$}
 \end{figure}
 
 
@@ -73,7 +96,6 @@ Bubble Sort has a worst-case and average-case time complexity of $O(n^2)$, where
 \subsubsection{Algorithm}
 The \textbf{Gnome Sort} function in C sorts an array of integers in ascending order by iteratively comparing each element with the next one and swapping them if they are out of order, moving the index backward after a swap to recheck previous elements, and moving it forward otherwise, continuing this process until the entire array is sorted, ensuring that each element is in its correct position by the end of the algorithm.
 
-\newpage
 \begin{lstlisting}[language=C, caption=Gnome Sort implementation]
 void gnome_sort(int arr[], int n) {
   int i = 0;
@@ -107,9 +129,20 @@ Gnome Sort has a worst-case and average-case time complexity of $O(n^2)$, where 
 \subsection{Radix Sort}
 
 \subsubsection{Algorithm}
+The \textbf{key} function in C extracts the digit at a specific position (determined by the parameter \textbf{i}) from an integer \textbf{x}. It repeatedly divides \textbf{x} by 10 until the desired position is reached and then returns the digit at that position using the modulus operator.
+
+\begin{lstlisting}[language=C, caption=Key implementation]
+int key(int x, int i) {
+  while (i > 0) {
+    x = x / 10;
+    i--;
+  }
+  return x % 10;
+}
+\end{lstlisting}
+
 The \textbf{Sort Aux} function in C sorts an array of integers based on a specific digit (determined by the parameter `i`) using a counting sort approach, where it first counts the occurrences of each digit, then calculates the cumulative count, places the elements into an output array in sorted order according to the current digit, and finally copies the sorted elements back into the original array, ensuring that the array is partially sorted by the specified digit.
 
-\newpage
 \begin{lstlisting}[language=C, caption=Sort Aux implementation]
 void sort_aux(int arr[], int n, int i) {
   int *output = (int *)malloc(n * sizeof(int));
@@ -133,6 +166,7 @@ void sort_aux(int arr[], int n, int i) {
 }
 \end{lstlisting}
 
+\newpage
 The \textbf{Radix Sort Helper} function in C sorts an array of integers by iterating through each digit from the least significant to the most significant, calling the \textbf{Sort Aux} function to sort the array based on the current digit, while the \textbf{Radix Sort} function determines the maximum number of digits in the largest number of the array and then calls \textbf{Radix Sort Helper} to perform the sorting process, ensuring the entire array is sorted by all digits.
 
 \begin{lstlisting}[language=C, caption=Radix Sort implementation]
@@ -173,6 +207,7 @@ Radix Sort has a time complexity of $O(d \cdot (n + k))$, where $d$ is the numbe
 \subsubsection{Algorithm}
 The \textbf{Partition} function in C rearranges the elements of an array around a pivot element (chosen as the first element of the array segment) such that all elements less than or equal to the pivot are on its left and all elements greater than the pivot are on its right, by iteratively moving indices from both ends towards the center, swapping elements as needed, and finally placing the pivot in its correct position, returning the index of the pivot.
 
+\newpage
 \begin{lstlisting}[language=C, caption=Partition implementation]
 int partition(int arr[], int low, int high) {
   int p = arr[low];
@@ -209,6 +244,31 @@ void quick_sort_helper(int arr[], int low, int high) {
 
 void quick_sort(int arr[], int n) { quick_sort_helper(arr, 0, n - 1); }
 \end{lstlisting}
+
+\newpage
+\subsubsection{Recurrence Equation}
+The recurrence equation for the Quick Sort algorithm can be derived based on the partitioning process. Let $T(n)$ be the time complexity of Quick Sort for an array of size $n$.
+
+In the worst case, the pivot element divides the array into two subarrays of sizes $0$ and $n-1$. Therefore, the recurrence relation for the worst case is:
+\[
+	T(n) = T(n-1) + T(0) + O(n) = T(n-1) + O(n)
+\]
+
+In the best case, the pivot element divides the array into two equal subarrays of size $n/2$. Therefore, the recurrence relation for the best case is:
+\[
+	T(n) = 2T\left(\frac{n}{2}\right) + O(n)
+\]
+
+To solve the best-case recurrence relation, we use the Master Theorem for divide-and-conquer recurrences of the form:
+\[
+	T(n) = aT\left(\frac{n}{b}\right) + f(n)
+\]
+where $a = 2$, $b = 2$, and $f(n) = O(n)$. According to the Master Theorem, since $a = b^c$ where $c = 1$, we have:
+\[
+	T(n) = O(n \log n)
+\]
+
+Thus, the best-case and average-case time complexity of Quick Sort is \newline $O(n \log n)$, while the worst-case time complexity is $O(n^2)$.
 
 \subsubsection{Complexity}
 Quick Sort has a worst-case time complexity of $O(n^2)$, which occurs when the pivot selection is poor. However, the average-case and best-case time complexity is $O(n \log n)$. The space complexity is $O(\log n)$ due to the recursive stack space.
