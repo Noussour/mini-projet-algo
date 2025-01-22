@@ -3,7 +3,7 @@ code/obj/
 code/data/
 
 rapport/aux/
-rapport/indent.log
+indent.log
 
 # Ignore all out files
 rapport/out/*

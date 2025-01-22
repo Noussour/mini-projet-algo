@@ -6,10 +6,10 @@ void heapify(int arr[], int n, int i) {
   int left = 2 * i + 1;  // Left child
   int right = 2 * i + 2; // Right child
 
-  if (left < n && arr[left] > arr[largest]) // Changed < to >
+  if (left < n && arr[left] > arr[largest])
     largest = left;
 
-  if (right < n && arr[right] > arr[largest]) // Changed < to >
+  if (right < n && arr[right] > arr[largest])
     largest = right;
 
   if (largest != i) {
