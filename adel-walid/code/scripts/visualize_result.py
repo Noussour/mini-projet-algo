@@ -11,5 +11,6 @@ plt.xlabel("Array Size")
 plt.ylabel("Execution Time (s)")
 plt.title("Sorting Algorithm Performance")
 plt.legend()
-plt.show()
+plt.savefig('images/plot.png')
+print("Plot saved to plot.png")
 

@@ -18,7 +18,7 @@ typedef enum {
   ALL_SORTS = (1 << 6) - 1
 } SortingAlgorithm;
 
-#define SELECTED_ALGORITHMS (QUICK_SORT | HEAP_SORT)
+#define SELECTED_ALGORITHMS (ALL_SORTS)
 
 typedef struct {
   const char *name;
