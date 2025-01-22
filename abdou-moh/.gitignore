@@ -1,0 +1,15 @@
+code/bin/
+code/obj/
+code/data/
+
+rapport/aux/
+rapport/indent.log
+
+# Ignore all out files
+rapport/out/*
+# Allow only out .pdf file
+!rapport/out/*.pdf
+
+venv/
+*.pyc
+__pycache__/
