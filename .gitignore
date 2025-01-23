@@ -1,0 +1,11 @@
+adel-walid/code/bin/
+adel-walid/code/obj/
+adel-walid/code/data/
+
+adel-walid/rapport/aux/
+indent.log
+
+# Ignore all out files
+adel-walid/rapport/out/*
+# Allow only out .pdf file
+!adel-walid/rapport/out/*.pdf

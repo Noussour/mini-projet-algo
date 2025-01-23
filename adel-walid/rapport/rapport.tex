@@ -249,12 +249,36 @@ void quick_sort(int arr[], int n) { quick_sort_helper(arr, 0, n - 1); }
 \subsubsection{Recurrence Equation}
 The recurrence equation for the Quick Sort algorithm can be derived based on the partitioning process. Let $T(n)$ be the time complexity of Quick Sort for an array of size $n$.
 
-In the worst case, the pivot element divides the array into two subarrays of sizes $0$ and $n-1$. Therefore, the recurrence relation for the worst case is:
+In the \textbf{worst case}, the pivot element divides the array into two subarrays of sizes $0$ and $n-1$. Therefore, the recurrence relation for the worst case is:
 \[
 	T(n) = T(n-1) + T(0) + O(n) = T(n-1) + O(n)
 \]
+We can expand this recurrence relation as follows:
+\[
+	T(n) = T(n-1) + O(n)
+\]
+\[
+	T(n-1) = T(n-2) + O(n-1)
+\]
+\[
+	\vdots
+\]
+\[
+	T(2) = T(1) + O(2)
+\]
+\[
+	T(1) = T(0) + O(1)
+\]
+Summing all these equations, we get:
+\[
+	T(n) = O(n) + O(n-1) + \cdots + O(1)
+\]
+This forms an arithmetic series, which sums to:
+\[
+	T(n) = O\left(\sum_{i=1}^{n} i\right) = O\left(\frac{n(n+1)}{2}\right) = O(n^2)
+\]
 
-In the best case, the pivot element divides the array into two equal subarrays of size $n/2$. Therefore, the recurrence relation for the best case is:
+In the \textbf{best case}, the pivot element divides the array into two equal subarrays of size $n/2$. Therefore, the recurrence relation for the best case is:
 \[
 	T(n) = 2T\left(\frac{n}{2}\right) + O(n)
 \]
@@ -268,10 +292,7 @@ where $a = 2$, $b = 2$, and $f(n) = O(n)$. According to the Master Theorem, sinc
 	T(n) = O(n \log n)
 \]
 
-Thus, the best-case and average-case time complexity of Quick Sort is \newline $O(n \log n)$, while the worst-case time complexity is $O(n^2)$.
-
-\subsubsection{Complexity}
-Quick Sort has a worst-case time complexity of $O(n^2)$, which occurs when the pivot selection is poor. However, the average-case and best-case time complexity is $O(n \log n)$. The space complexity is $O(\log n)$ due to the recursive stack space.
+Thus, the \textbf{best-case} and \textbf{average-case} time complexity of Quick Sort is \newline $O(n \log n)$, while the \textbf{worst-case} time complexity is $O(n^2)$.
 
 \subsubsection{Results}
 \begin{figure}[H]
