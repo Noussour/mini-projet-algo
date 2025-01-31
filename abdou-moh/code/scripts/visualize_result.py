@@ -1,20 +1,12 @@
 # scripts/visualize_results.py
 import pandas as pd
-
 import matplotlib.pyplot as plt
-from datetime import datetime
+import seaborn as sns
 import os
 import matplotlib
+from datetime import datetime
+
 matplotlib.use('TkAgg')  # Or 'Qt5Agg' for Qt5
-
-from screeninfo import get_monitors
-
-# Get screen resolution
-monitor = get_monitors()[0]  # Use the primary monitor
-screen_width, screen_height = monitor.width, monitor.height
-
-# Set figure size to full screen
-plt.figure(figsize=(screen_width / 100, screen_height / 100))  # Divide by 100 for scaling
 
 # Read the CSV file
 df = pd.read_csv("data/result.csv")
@@ -26,21 +18,37 @@ os.makedirs("images", exist_ok=True)
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 filename = f"images/plot_{timestamp}.png"
 
-# Plot the results
-for algo in df["Algorithm"].unique():
-    subset = df[df["Algorithm"] == algo]
-    plt.plot(subset["Array Size"], subset["Execution Time"], label=algo)
+# Create a color palette
+palette = sns.color_palette("husl", len(df["Algorithm"].unique()))
 
-plt.xlabel("Array Size")
-plt.ylabel("Execution Time (s)")
-plt.title("Sorting Algorithm Performance")
-plt.legend()
+# Plot each algorithm with different styles
+plt.figure(figsize=(12, 8))
+for i, algo in enumerate(df["Algorithm"].unique()):
+    subset = df[df["Algorithm"] == algo]
+    sns.lineplot(
+        x=subset["Array Size"],
+        y=subset["Execution Time"] * 1000,
+        label=algo,
+        color=palette[i],
+        marker="o",
+        linestyle="-",
+    )
+
+# Add labels and title
+plt.xlabel("Array Size", fontsize=14)
+plt.ylabel("Execution Time (ms)", fontsize=14)
+plt.title("Sorting Algorithm Performance", fontsize=16)
+
+# Customize the legend
+plt.legend(title="Algorithm", title_fontsize="13", fontsize="11")
+
+# Add grid lines
+plt.grid(True, linestyle="--", alpha=0.7)
+
+# Show the plot
+plt.tight_layout()
+plt.show()
 
 # Save the plot with the unique filename
 plt.savefig(filename)
 print(f"Plot saved to {filename}")
-
-
-
-
-plt.show()

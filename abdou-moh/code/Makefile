@@ -19,7 +19,6 @@ endif
 CC = gcc
 CFLAGS = -Wall -Iinclude
 LIBS = -lm
-LDFLAGS = -ld
 
 # Directories
 SRC_DIR = src
@@ -40,6 +39,9 @@ MAIN_OBJ = $(OBJ_DIR)/main.o
 # Target executable
 TARGET = $(OUTPUT_DIR)$(SEP)sorting_project$(EXE)
 
+# Array sizes to test (customizable via command line)
+SIZES ?= 1000 5000 10000  # Default sizes if none are provided
+
 # Default target
 all: $(TARGET)
 
@@ -55,28 +57,14 @@ $(TARGET): $(OBJS) $(MAIN_OBJ) | $(OUTPUT_DIR)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-# Build a specific test executable
-$(OUTPUT_DIR)/test_%$(EXE): $(OBJ_DIR)/test_%.o $(OBJS) | $(OUTPUT_DIR)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS) $(TESTFLAGS)
+# Evaluate sorting algorithms with generated arrays
+evaluate: $(TARGET) | $(DATA_DIR)
+	$(TARGET) $(DATA_DIR)$(SEP)result.csv $(SIZES)
 
-# Pattern rule for test targets
-test_%: $(OUTPUT_DIR)/test_%$(EXE)
-	@echo "Running $@..."
-	@$<
-
-
-$(DATA_DIR)/%: | $(DATA_DIR)
-	$(MKDIR) "$(dir $@)"
-	type nul > "$@"
-
-generate_data: $(DATA_DIR)/input_arrays.txt
-	$(PYTHON) $(SCRIPT_DIR)$(SEP)generate_arrays.py
-
-evaluate: $(TARGET) generate_data
-	.$(SEP)$(TARGET) $(DATA_DIR)$(SEP)input_arrays.txt $(DATA_DIR)$(SEP)result.csv
-
+# Visualize results (depends on evaluate)
 visualize: evaluate
 	$(PYTHON) $(SCRIPT_DIR)$(SEP)visualize_result.py
+
 
 # Clean target
 clean:
@@ -89,4 +77,4 @@ else
 endif
 
 # Phony targets
-.PHONY: all clean generate_data evaluate visualize
+.PHONY: all clean evaluate visualize

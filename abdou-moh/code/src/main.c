@@ -4,11 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <limits.h>
 
-#define MAX_ARRAY_SIZE 1000
-#define MAX_LINE_LENGTH 10000
-
-typedef enum {
+#define MAX_ARRAY_SIZE 100000
+typedef enum
+{
   BUBBLE_SORT = 1 << 0,
   GNOME_SORT = 1 << 1,
   HEAP_SORT = 1 << 2,
@@ -20,7 +20,8 @@ typedef enum {
 
 #define SELECTED_ALGORITHMS (ALL_SORTS)
 
-typedef struct {
+typedef struct
+{
   const char *name;
   void (*func)(int[], int);
   SortingAlgorithm flag;
@@ -35,37 +36,17 @@ static const SortingAlgorithmInfo algorithms[] = {
     {"Radix Sort", radix_sort, RADIX_SORT},
     {NULL, NULL, 0}};
 
-int read_arrays_from_file(const char *filename, int arrays[][MAX_ARRAY_SIZE],
-                          int *sizes, int *count) {
-  FILE *file = fopen(filename, "r");
-  if (!file) {
-    perror("Error opening file");
-    return -1;
-  }
 
-  char line[MAX_LINE_LENGTH];
-  *count = 0;
-  while (fgets(line, sizeof(line), file)) {
-    int index = 0;
-    char *token = strtok(line, " ");
-    while (token) {
-      arrays[*count][index++] = atoi(token);
-      token = strtok(NULL, " ");
-    }
-    sizes[*count] = index;
-    (*count)++;
-  }
-  fclose(file);
-  return 0;
-}
-
-void set_csv_file(FILE *file) {
+void set_csv_file(FILE *file)
+{
   fprintf(file, "%s,%s,%s\n", "Algorithm", "Array Size", "Execution Time");
 }
 
-FILE *open_csv(const char *filename, const char *mode) {
+FILE *open_csv(const char *filename, const char *mode)
+{
   FILE *file = fopen(filename, mode);
-  if (!file) {
+  if (!file)
+  {
     perror("Error opening CSV file");
     return NULL;
   }
@@ -73,17 +54,21 @@ FILE *open_csv(const char *filename, const char *mode) {
 }
 
 void write_results_to_csv(FILE *file, const char *algorithm, int array_size,
-                          double execution_time) {
+                          double execution_time)
+{
   fprintf(file, "%s,%d,%.6f\n", algorithm, array_size, execution_time);
 }
 
-void print_results_in_terminal(const char *algorithm, int array_size, double execution_time) {
-    printf("| %-20s | %-10d | %-15.6f |\n", algorithm, array_size, execution_time);
+void print_results_in_terminal(const char *algorithm, int array_size, double execution_time)
+{
+  printf("| %-20s | %-10d | %-15.6f |\n", algorithm, array_size, execution_time);
 }
 
-double measure_sort_time(void (*sort_func)(int[], int), int arr[], int size) {
+double measure_sort_time(void (*sort_func)(int[], int), int arr[], int size)
+{
   int *temp = malloc(size * sizeof(int));
-  if (!temp) {
+  if (!temp)
+  {
     perror("Memory allocation error");
     return -1;
   }
@@ -97,36 +82,84 @@ double measure_sort_time(void (*sort_func)(int[], int), int arr[], int size) {
   return ((double)(end - start)) / CLOCKS_PER_SEC;
 }
 
-void print_enabled_algorithms(void) {
+void print_enabled_algorithms(void)
+{
   printf("Enabled sorting algorithms:\n");
-  for (int i = 0; algorithms[i].name != NULL; i++) {
-    if (SELECTED_ALGORITHMS & algorithms[i].flag) {
+  for (int i = 0; algorithms[i].name != NULL; i++)
+  {
+    if (SELECTED_ALGORITHMS & algorithms[i].flag)
+    {
       printf("- %s\n", algorithms[i].name);
     }
   }
 }
 
-int main(int argc, char *argv[]) {
-  if (argc < 3) {
-    printf("Usage: %s <input_file> <output_csv>\n", argv[0]);
-    return 1;
+// Function to validate and convert command-line argument to a valid size
+long get_array_size(const char *arg)
+{
+  char *endptr;
+  long size = strtol(arg, &endptr, 10);
+
+  // Check if the conversion was successful
+  if (*endptr != '\0')
+  {
+    fprintf(stderr, "Error: '%s' is not a valid number.\n", arg);
+    exit(1);
   }
 
-  const char *input_file = argv[1];
-  const char *output_csv = argv[2];
-
-  // Display enabled algorithms
-  print_enabled_algorithms();
-
-  // Read input arrays
-  int arrays[100][MAX_ARRAY_SIZE];
-  int sizes[100];
-  int count;
-  if (read_arrays_from_file(input_file, arrays, sizes, &count) != 0) {
-    return 1;
+  // Validate the size
+  if (size <= 0)
+  {
+    fprintf(stderr, "Error: Size must be a positive integer. Invalid size: %s\n", arg);
+    exit(1);
   }
 
-  printf("Processing %d arrays from %s...\n", count, input_file);
+  if (size > MAX_ARRAY_SIZE)
+  {
+    fprintf(stderr, "Error: Size exceeds the maximum array size of %d. Invalid size: %s\n", MAX_ARRAY_SIZE, arg);
+    exit(1);
+  }
+
+  return size;
+}
+
+// Function to allocate memory for an array
+int *allocate_array(long size)
+{
+  int *array = (int *)malloc(size * sizeof(int));
+  if (array == NULL)
+  {
+    fprintf(stderr, "Memory allocation failed for array of size %ld.\n", size);
+    exit(1);
+  }
+  return array;
+}
+
+// Function to fill an array with random numbers
+void fill_array_with_random(int *array, long size)
+{
+  for (int i = 0; i < size; i++)
+  {
+    array[i] = rand() % (INT_MAX + 1U); // Random numbers between 0 and INT_MAX
+  }
+}
+
+int main(int argc, char *argv[])
+{
+  if (argc < 3)
+  {
+    fprintf(stderr, "USAGE: %s <output_csv> <size1> <size2> ...\n", argv[0]);
+    exit(1);
+  }
+
+  const char *output_csv = argv[1];
+
+  // Seed the random number generator
+  srand(time(NULL));
+
+  // Print the number of arrays
+  int num_arrays = argc - 2;
+  printf("Number of arrays: %d\n", num_arrays);
 
   // Initialize CSV file
   FILE *csv_file = open_csv(output_csv, "w");
@@ -136,21 +169,37 @@ int main(int argc, char *argv[]) {
   // Append results
   csv_file = open_csv(output_csv, "a");
 
-  // Run enabled sorting algorithms
-    printf("|----------------------|------------|-----------------|\n");
+  // Display enabled algorithms
+  print_enabled_algorithms();
+
+
+  // Print the table header
+  printf("|----------------------|------------|-----------------|\n");
   printf("| %-20s | %-10s | %-15s |\n", "Algorithm", "Array Size", "Execution Time");
-  for (int i = 0; i < count; i++) {
-        // Print the table header
-    printf("|----------------------|------------|-----------------|\n");
-    for (int j = 0; algorithms[j].name != NULL; j++) {
-      if (SELECTED_ALGORITHMS & algorithms[j].flag) {
-        double time_taken = measure_sort_time(algorithms[j].func, arrays[i], sizes[i]);
-        print_results_in_terminal(algorithms[j].name, sizes[i], time_taken);
-        write_results_to_csv(csv_file, algorithms[j].name, sizes[i],
+  printf("|----------------------|------------|-----------------|\n");
+  for (int i = 2; i < argc; i++)
+  {
+    // Convert argument to size
+    long size = get_array_size(argv[i]);
+
+    // Allocate memory for the array
+    int *array = allocate_array(size);
+
+    // Fill the array with random numbers
+    fill_array_with_random(array, size);
+
+    for (int j = 0; algorithms[j].name != NULL; j++)
+    {
+      if (SELECTED_ALGORITHMS & algorithms[j].flag)
+      {
+        double time_taken = measure_sort_time(algorithms[j].func, array, size);
+        print_results_in_terminal(algorithms[j].name, size, time_taken);
+        write_results_to_csv(csv_file, algorithms[j].name, size,
                              time_taken);
       }
+      printf("|----------------------|------------|-----------------|\n");
     }
-      printf("|======================|============|=================|\n");
+    printf("|======================|============|=================|\n");
   }
 
   fclose(csv_file);
