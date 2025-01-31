@@ -43,7 +43,7 @@ TARGET = $(OUTPUT_DIR)$(SEP)sorting_project$(EXE)
 SIZES ?= 1000 5000 10000  # Default sizes if none are provided
 
 # Default target
-all: $(TARGET)
+all: visualize
 
 # Create directories if they don't exist
 $(OBJ_DIR) $(OUTPUT_DIR) $(DATA_DIR):

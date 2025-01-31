@@ -45,10 +45,9 @@ plt.legend(title="Algorithm", title_fontsize="13", fontsize="11")
 # Add grid lines
 plt.grid(True, linestyle="--", alpha=0.7)
 
-# Show the plot
 plt.tight_layout()
-plt.show()
-
 # Save the plot with the unique filename
 plt.savefig(filename)
 print(f"Plot saved to {filename}")
+# Show the plot
+plt.show()
