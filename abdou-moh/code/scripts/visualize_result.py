@@ -1,8 +1,20 @@
 # scripts/visualize_results.py
 import pandas as pd
+
 import matplotlib.pyplot as plt
 from datetime import datetime
 import os
+import matplotlib
+matplotlib.use('TkAgg')  # Or 'Qt5Agg' for Qt5
+
+from screeninfo import get_monitors
+
+# Get screen resolution
+monitor = get_monitors()[0]  # Use the primary monitor
+screen_width, screen_height = monitor.width, monitor.height
+
+# Set figure size to full screen
+plt.figure(figsize=(screen_width / 100, screen_height / 100))  # Divide by 100 for scaling
 
 # Read the CSV file
 df = pd.read_csv("data/result.csv")
@@ -27,3 +39,8 @@ plt.legend()
 # Save the plot with the unique filename
 plt.savefig(filename)
 print(f"Plot saved to {filename}")
+
+
+
+
+plt.show()
